@@ -75,7 +75,7 @@ Google Cloud SwiftクライアントとWorkspace APIの対応範囲を区別す�
 
 実装言語は対応IssueとADRで確定する。実装後はBot署名・権限・冪等性・Workspace scope・MCP認可のテストを行う。Domain-wide delegationは無断で有効化しない。
 
-初期CIは共通Repository policy検査のみ。アプリのビルド・テスト・実行を検証済みとは扱わない。実装Issueでmanifest・lockfile・テストを追加し、対応する実コードCIを有効化する。
+CIは共通Repository policy検査とSwiftのビルド・テストを実行する。依存を追加する場合はSwiftPMのlockfileをコミットする。Google API接続の検証結果は、合成データによるSwiftテストと区別して記録する。
 
 ## GitHub Codexレビューとマージ条件
 

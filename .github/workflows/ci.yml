@@ -14,3 +14,15 @@ jobs:
     uses: sauna-studio/.github/.github/workflows/reusable-repository.yml@2fa12fccae6fd62a20136a7d28b0a5b678f128d6
     permissions:
       contents: read
+  swift:
+    name: Swift build and test
+    runs-on: ubuntu-latest
+    container:
+      image: swift:6.4.2-noble@sha256:bca121f6eb59fd80340d1296887b2698ed8f3eb9eca7d80c181f8af769dc7ee0
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: swift build --force-resolved-versions
+      - run: swift test --force-resolved-versions
