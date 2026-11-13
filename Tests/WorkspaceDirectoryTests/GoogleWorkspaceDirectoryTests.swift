@@ -83,6 +83,7 @@ struct GoogleWorkspaceDirectoryTests {
         (403, #"{"error":{"code":403,"errors":[{"reason":"userRateLimitExceeded"}]}}"#, .rateLimited),
         (403, #"{"error":{"code":403,"errors":[{"reason":"quotaExceeded"},{"reason":"forbidden"}]}}"#, .unverifiable),
         (401, "{}", .unverifiable),
+        (408, "{}", .temporarilyUnavailable),
         (429, "{}", .rateLimited),
         (503, "{}", .temporarilyUnavailable),
         (302, "{}", .unverifiable),

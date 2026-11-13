@@ -125,7 +125,7 @@ public struct GoogleWorkspaceDirectory: WorkspaceDirectoryLookup {
             let reasons = reasons(in: data, status: status)
             if !reasons.isEmpty, reasons.isSubset(of: quotaReasons) { throw .rateLimited }
             throw .unverifiable
-        case 500, 502, 503, 504:
+        case 408, 500, 502, 503, 504:
             throw .temporarilyUnavailable
         default:
             throw .unverifiable
