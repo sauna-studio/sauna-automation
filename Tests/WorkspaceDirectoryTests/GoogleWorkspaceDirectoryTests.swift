@@ -125,11 +125,17 @@ struct GoogleWorkspaceDirectoryTests {
         await #expect(throws: WorkspaceDirectoryFailure.unverifiable) { try await directory.user(id: "user-id") }
     }
 
-    @Test func transportTimeoutIsRetryableAndOversizedBodyIsUnverifiable() async {
-        let timeout = GoogleWorkspaceDirectory(accessToken: { _ in "synthetic" }) { _ in
-            throw URLError(.timedOut)
+    @Test(arguments: [URLError.Code.timedOut, .dnsLookupFailed, .cannotFindHost])
+    func transientTransportFailureIsRetryable(code: URLError.Code) async {
+        let directory = GoogleWorkspaceDirectory(accessToken: { _ in "synthetic" }) { _ in
+            throw URLError(code)
         }
-        await #expect(throws: WorkspaceDirectoryFailure.temporarilyUnavailable) { try await timeout.user(id: "user-id") }
+        await #expect(throws: WorkspaceDirectoryFailure.temporarilyUnavailable) {
+            try await directory.user(id: "user-id")
+        }
+    }
+
+    @Test func oversizedBodyIsUnverifiable() async {
         let oversized = mock(body: #"{"isMember":true}"# + String(repeating: " ", count: 32_768))
         await #expect(throws: WorkspaceDirectoryFailure.unverifiable) {
             try await oversized.isMember(userID: "user-id", groupID: "group-id")

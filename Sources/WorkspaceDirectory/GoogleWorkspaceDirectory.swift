@@ -103,7 +103,8 @@ public struct GoogleWorkspaceDirectory: WorkspaceDirectoryLookup {
         } catch let error as URLError {
             guard !Task.isCancelled else { throw .unverifiable }
             switch error.code {
-            case .timedOut, .networkConnectionLost, .notConnectedToInternet, .cannotConnectToHost:
+            case .timedOut, .networkConnectionLost, .notConnectedToInternet, .cannotConnectToHost,
+                 .dnsLookupFailed, .cannotFindHost:
                 throw .temporarilyUnavailable
             default:
                 throw .unverifiable
