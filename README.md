@@ -20,6 +20,6 @@ Workspace社員確認のローカル検証は Swift 6 / macOS 15以上で `swift
 
 [ADR-0025](https://github.com/sauna-studio/sauna-docs/blob/main/docs/adr/0025-workspace-authorization.md) に沿い、検証器には紐付け済みの不変なDirectoryユーザーIDと、信頼できる設定から指定した顧客ID・グループIDを渡します。呼び出し元が有効化や施設ロールを決定する際は、別途Sauna APIの認可を適用します。照会は順次実行されるため結果はその確認時点の判断に使い、恒久的な認可として保持しません。`.unavailable` では新規有効化や権限の延長を行わず、確定した非所属と一時障害は区別します。
 
-合成アダプターで停止・アーカイブ・ゲスト・削除・組織外・グループ離脱、照会失敗、有限回再試行を検証します。実際のRESTアダプターでは、期限とキャンセルに従い、不変IDをURLパスのセグメントとして適切に符号化し、未知・欠落した状態、権限エラー、存在不明の応答を検証不能として扱います。テナント・グループへの実アクセス、アカウントの紐付け、社員ロールの有効化・失効は後続作業です。
+合成アダプターで停止・アーカイブ・ゲスト・削除・組織外・グループ離脱、照会失敗、有限回再試行を検証します。Directory RESTアダプターは [users.get](https://developers.google.com/workspace/admin/directory/reference/rest/v1/users/get) と [members.hasMember](https://developers.google.com/workspace/admin/directory/reference/rest/v1/members/hasMember) を読み取り専用で呼び出し、判定に必要な項目だけを取得します。OAuthトークンの発行や更新は呼び出し側の責務です。テナント・グループへの実アクセスはWorkspace契約後に検証します。アカウントの紐付けと社員ロールの有効化・失効は後続作業です。
 
 [AGENTS.md](AGENTS.md) と [CONTRIBUTING.md](CONTRIBUTING.md) に従い、Issueの依存関係を満たしてから独立Review Agentを並行起動して実装します。共通規則適用元: [sauna-studio/.github@075c6695309d](https://github.com/sauna-studio/.github/tree/075c6695309d28baad2dc1391d7d3821b81142cc)。
