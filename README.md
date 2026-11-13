@@ -22,4 +22,6 @@ Workspace社員確認のローカル検証は Swift 6 / macOS 15以上で `swift
 
 合成アダプターで停止・アーカイブ・ゲスト・削除・組織外・グループ離脱、照会失敗、有限回再試行を検証します。Directory RESTアダプターは [users.get](https://developers.google.com/workspace/admin/directory/reference/rest/v1/users/get) と [members.hasMember](https://developers.google.com/workspace/admin/directory/reference/rest/v1/members/hasMember) を読み取り専用で呼び出し、判定に必要な項目だけを取得します。OAuthトークンの発行や更新は呼び出し側の責務です。テナント・グループへの実アクセスはWorkspace契約後に検証します。アカウントの紐付けと社員ロールの有効化・失効は後続作業です。
 
+定期再確認の処理は、Directoryが非適格と確定した場合にだけ失効を要求します。適格または照会不能という結果で権限を付与・延長しません。Sauna側の呼び出し元は、開始時に再利用しないリビジョンを予約し、失効と監査を同じトランザクションで行う必要があります。更新後にエラーが返った場合は、永続状態を再確認します。Sauna APIの永続化・定期実行は後続です。
+
 [AGENTS.md](AGENTS.md) と [CONTRIBUTING.md](CONTRIBUTING.md) に従い、Issueの依存関係を満たしてから独立Review Agentを並行起動して実装します。共通規則適用元: [sauna-studio/.github@075c6695309d](https://github.com/sauna-studio/.github/tree/075c6695309d28baad2dc1391d7d3821b81142cc)。
